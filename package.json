@@ -1,0 +1,28 @@
+{
+  "name": "byobs",
+  "version": "1.0.0",
+  "description": "A minimal BYOS implementation for the TRMNL ecosystem",
+  "homepage": "https://github.com/Rosefae/BYOBS#readme",
+  "bugs": {
+    "url": "https://github.com/Rosefae/BYOBS/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rosefae/BYOBS.git"
+  },
+  "license": "ISC",
+  "author": "Rose Liu",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "jimp": "^1.6.1",
+    "puppeteer": "^25.7.0"
+  },
+  "allowScripts": {
+    "puppeteer@25.7.0": true
+  }
+}
