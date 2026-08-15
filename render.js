@@ -1,10 +1,22 @@
 import path from 'node:path';
 import * as fs from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import puppeteer from "puppeteer";
-import { Jimp } from "jimp";
+import {
+    initializeImageMagick,
+    ImageMagick,
+    Magick,
+    MagickFormat,
+    Quantum,
+} from '@imagemagick/magick-wasm';
 
 import * as constants from "./constants.js";
 import * as utils from "./utils.js";
+
+const imageMagickPath = path.dirname(fileURLToPath(import.meta.resolve("@imagemagick/magick-wasm"))),
+    imageMagickWasm = path.join(imageMagickPath, "./magick.wasm");
+
+var imageMagickInitialized = false;
 
 export async function generateImage(device) {
     const screenshotSuccess = await takeScreenshot(device.url, device.width, device.height, device.api_key);
@@ -48,19 +60,46 @@ async function takeScreenshot(url, width, height, apiKey) {
 }
 
 async function postprocess(grayscaleDepth, colorDepth, apiKey, preferBmp) {
+    const originalScreenshotPath = path.join(constants.RENDERS_ABS_PATH, `${apiKey}--original.png`);
+    const filename = preferBmp ? `${apiKey}.bmp` : `${apiKey}.png`;
+    const processedImgPath = path.join(constants.RENDERS_ABS_PATH, filename);
+
     try {
-        const originalScreenshotPath = path.join(constants.RENDERS_ABS_PATH, `${apiKey}--original.png`),
-            image = await Jimp.read(originalScreenshotPath);
+        // const originalScreenshotPath = path.join(constants.RENDERS_ABS_PATH, `${apiKey}--original.png`),
+        //     image = await Jimp.read(originalScreenshotPath);
 
-        if (colorDepth == 0) {
-            image.greyscale();
-        }
+        // if (colorDepth == 0) {
+        //     image.greyscale();
+        //     image.dither();
+        //     image.posterize(2 ** grayscaleDepth);
+        // }
         
-        const filename = preferBmp ? `${apiKey}.bmp` : `${apiKey}.png`;
+        // const filename = preferBmp ? `${apiKey}.bmp` : `${apiKey}.png`;
 
-        await image.write(path.join(constants.RENDERS_ABS_PATH, filename));
+        // await image.write(path.join(constants.RENDERS_ABS_PATH, filename));
 
-        return filename;
+        // return filename;
+
+        
+
+        if (!imageMagickInitialized) {
+            console.log(imageMagickWasm);
+            let wasmBuffer = await fs.promises.readFile(imageMagickWasm);
+            await initializeImageMagick(wasmBuffer);
+            imageMagickInitialized = true;
+        }
+
+        const imageBuffer = await fs.promises.readFile(originalScreenshotPath);
+
+        console.log(Magick.imageMagickVersion);
+
+        ImageMagick.read(new Uint8Array(imageBuffer), (image) => {
+            console.log(`Image format: ${image.format}`);
+            image.colorSpace("Gray");
+        });
+        return true;
+
+
     } catch (error) {
         console.error("[render.js] Error postprocessing screenshot", error);
     }

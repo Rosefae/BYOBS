@@ -19,8 +19,8 @@
     "start": "node --env-file=.env server.js"
   },
   "dependencies": {
+    "@imagemagick/magick-wasm": "^0.0.42",
     "express": "^5.2.1",
-    "jimp": "^1.6.1",
     "puppeteer": "^25.7.0"
   },
   "allowScripts": {
