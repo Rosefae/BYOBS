@@ -2,7 +2,7 @@
 
 Bring Your Own Basic Server or Bring Your Own Barebones Server. A minimal BYOS implementation for TRMNL with no fancy widgets, WYSIWYG dashboards, or other bloat -- just name a URL, and BYOBS will serve a screenshot of the page to your device!
 
-Useful for if you already have a webpage you just want to display, or if you (like me!) prefer to make your own dashboard with HTML/CSS for more granular control. Can also be used as a starter for more complex use cases.
+Useful for if you already have a webpage you want to display, or if you (like me!) prefer to make your own dashboard with HTML/CSS for more granular control. Can also be used as a starter for more complex use cases.
 
 ## Requirements
 
@@ -46,6 +46,10 @@ The generated images will be stored at `renders/<device API key>.png` or `render
 ## Technical Details
 
 Why is this in Node.js? Because it was originally part of a separate project (which was in Node) before I decided to separate this out into its own thing.
+
+### Known Issues
+
+Puppeteer has trouble accessing external websites with anti-bot measures. There are ways around this but I haven't investigated them yet.
 
 ## License
 

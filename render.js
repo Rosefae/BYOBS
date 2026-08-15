@@ -21,7 +21,9 @@ async function takeScreenshot(url, width, height, apiKey) {
 
     try {
         console.log("[render.js] Launching Puppeteer...");
-        browser = await puppeteer.launch();
+        browser = await puppeteer.launch({
+            args: ["--no-sandbox"]
+        });
         const page = await browser.newPage();
 
         console.log(`[render.js] Setting viewport size: ${width}x${height}`);
