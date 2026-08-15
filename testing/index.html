@@ -16,10 +16,13 @@
         <button type="button" id="setup-test">/api/setup</button>
         <button type="button" id="display-test">/api/display</button>
         <button type="button" id="log-test">/api/log</button>
+
+        <div id="results-box"></div>
     </form>
 
     <script>
         const idField = document.getElementById("id-field");
+        const resultsBox = document.getElementById("results-box");
 
         const setupTestBtn = document.getElementById("setup-test");
         setupTestBtn.addEventListener("click", async (e)=>{
@@ -65,6 +68,9 @@
                 }
 
                 const result = await response.json();
+                resultsBox.innerHTML = `
+                    <img src="${result.image_url}?t=${Date.now()}" alt="screenshot">
+                `
                 console.log(result);
             } catch (error) {
                 console.error(error);

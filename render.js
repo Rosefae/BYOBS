@@ -54,6 +54,8 @@ async function postprocess(grayscaleDepth, colorDepth, apiKey, preferBmp) {
 
         if (colorDepth == 0) {
             image.greyscale();
+            image.dither();
+            image.quantize({ colors: 2 ** grayscaleDepth, imageQuantization: "floyd-steinberg" });
         }
         
         const filename = preferBmp ? `${apiKey}.bmp` : `${apiKey}.png`;
