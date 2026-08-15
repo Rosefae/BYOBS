@@ -18,12 +18,18 @@ TODO
 # .env file
 
 PORT = 8081
-DOMAIN = <Your Domain or IP address>
+DOMAIN = <Your Domain or IP address and port>
 ```
+
+To enable developer mode, add `MODE = DEV`. Currently all this does is enable a page to facilitate testing the API endpoints (`<your-domain-or-ip>/testing`)
 
 ## Usage
 
-TODO
+### Adding or Configuring a Device
+
+While the server is running, you can go to its index page on your browser to access the device configuration page. From here, you can add new devices or modify the configuration for existing ones. 
+
+For devices that support it, pointing the device at the `api/setup` end point will also add the device.
 
 ### Device Settings
 
