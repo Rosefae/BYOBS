@@ -42,24 +42,25 @@ export async function getDeviceFromId(id) {
 
 export async function updateOrAddDevice(id, query) {
     id = String(id);
-    let devicesData = getDevicesData();
+    let devicesData = await getDevicesData();
 
     if (!devicesData) {
         devicesData = {}
     }
 
-    let device = devicesData[id];
+    let device;
 
-    if (device) {
+    if (Object.hasOwn(devicesData, id)) {
         console.log("[devices.js] Device already registered! Updating values");
+        device = { ...devicesData[id] };
     } else {
         console.log("[devices.js] Registering new device");
         device = {...DEVICE_DEFAULTS}
-        device[api_key] = crypto.randomUUID();
+        device["api_key"] = crypto.randomUUID();
     }
 
     Object.entries(device).forEach(([key, value]) => {
-        if (query.hasOwnProperty(key)) {
+        if (Object.hasOwn(query, key)) {
             device[key] = value;
         }
     });
@@ -70,7 +71,10 @@ export async function updateOrAddDevice(id, query) {
         console.error("[device.js] Data failed validation!", error);
     }
 
-    if (await saveDevicesData(devicesData)) return device[api_key];
+    devicesData[id] = device;
+    console.log(device.api_key)
+
+    if (await saveDevicesData(devicesData)) return device.api_key;
     else return null;
 }
 
@@ -135,7 +139,7 @@ function validateDeviceData(device, tryToFix = true) {
 
 export async function saveDevicesData(devicesData) {
     Object.entries(devicesData).forEach(([key, value]) => {
-        if (!value.hasOwnProperty("api_key") || value["api_key"] == "") {
+        if (!Object.hasOwn(value, "api_key") || value["api_key"] == "") {
             value["api_key"] = crypto.randomUUID();
         } 
     });

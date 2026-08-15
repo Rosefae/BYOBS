@@ -177,6 +177,7 @@ input{
     border-radius: 1rem;
     color: var(--color-fg);
 
+    &[name^="id-"],
     &[name^="name-"] {
         width: 6rem;
     }

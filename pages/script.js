@@ -48,7 +48,10 @@ function addDeviceRow(id, device) {
             "id-" + deviceCounter,
             "",
             "table-heading-id",
-            { onchange: "validateNewId(this)" }
+            {
+                onchange: "validateNewId(this)",
+                required: true
+            }
         );
     }
     else {

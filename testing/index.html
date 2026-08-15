@@ -6,10 +6,103 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BYOBS Endpoints Tests</title>
     <link rel="stylesheet" href="/style.css">
-    <script src="/script.js" defer></script>
 </head>
 
 <body>
     <h1>Page for Testing BYOBS Endpoints</h1>
+
+    <form>
+        <label>Test Device ID: <input type="text" name="id" id="id-field"></label><br>
+        <button type="button" id="setup-test">/api/setup</button>
+        <button type="button" id="display-test">/api/display</button>
+        <button type="button" id="log-test">/api/log</button>
+    </form>
+
+    <script>
+        const idField = document.getElementById("id-field");
+
+        const setupTestBtn = document.getElementById("setup-test");
+        setupTestBtn.addEventListener("click", async (e)=>{
+            e.preventDefault;
+            const deviceId = idField.value;
+            const header = {
+                "ID": deviceId,
+                "Content-Type": "application/json"
+            }
+
+            try {
+                const response = await fetch("/api/setup", {
+                    headers: header
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error: ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log(result);
+            } catch (error) {
+                consoe.error(error);
+            }
+        });
+        
+        const displayTestBtn = document.getElementById("display-test");
+        displayTestBtn.addEventListener("click", async (e) => {
+            e.preventDefault;
+            const deviceId = idField.value;
+            const header = {
+                "ID": deviceId,
+                "Content-Type": "application/json"
+            }
+
+            try {
+                const response = await fetch("/api/display", {
+                    headers: header
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error: ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log(result);
+            } catch (error) {
+                consoe.error(error);
+            }
+        });
+
+        const logTestBtn = document.getElementById("log-test");
+        logTestBtn.addEventListener("click", async (e) => {
+            e.preventDefault;
+            const deviceId = idField.value;
+            const header = {
+                "ID": deviceId,
+                "Content-Type": "application/json"
+            }
+            const dummyPayload = [
+                {
+                    device: deviceId,
+                    message: "this is a test"
+                }
+            ]
+
+            try {
+                const response = await fetch("/api/log", {
+                    method: "POST",
+                    headers: header,
+                    body: JSON.stringify(dummyPayload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error: ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log(result);
+            } catch (error) {
+                consoe.error(error);
+            }
+        });
+    </script>
 </body>
 </html>

@@ -15,6 +15,7 @@ function startServer() {
     app.use(constants.RENDERS_REL_URL, express.static(constants.RENDERS_ABS_PATH));
 
     if (constants.IS_DEV_MODE) {
+        console.log("[server.js] !!! SERVER IS RUNNING IN DEV MODE !!!")
         app.use("/testing", express.static(constants.TESTING_ABS_PATH));
     }
 
@@ -25,7 +26,7 @@ function startServer() {
     app.get("/api/display", async (req, res) => {
         const device = getDeviceFromId(req.get("ID"));
         if (device) {
-            const renderedFilename = generateImage(device);
+            const renderedFilename = await generateImage(device);
             if (renderedFilename) {
                 res.json({
                     filename: renderedFilename,
@@ -41,7 +42,13 @@ function startServer() {
     app.get("/api/setup", async (req, res) => {
         const deviceId = req.get("ID"),
             query = req.query;
-        const newApiKey = updateOrAddDevice(deviceId, query);
+        if (!deviceId) {
+            res.status(400).json({
+                message: "Missing device ID!"
+            });
+        }
+        const newApiKey = await updateOrAddDevice(deviceId, query);
+        console.log({ newApiKey });
         if (newApiKey) {
             res.json({
                 api_key: newApiKey,
@@ -58,7 +65,7 @@ function startServer() {
 
     app.post("/api/log", async (req, res) => {
         const log = JSON.stringify(req.body);
-        if (addLog(log)) {
+        if (await addLog(log)) {
             res.status(204).json({
                 message: "Logged!"
             });
@@ -85,7 +92,7 @@ function startServer() {
     app.post("/config/devices", async (req, res) => {
         if (!isLocal(req)) res.status(403);
         const newConfigs = req.body;
-        if (saveDevicesData(newConfigs)) {
+        if (await saveDevicesData(newConfigs)) {
             res.status(200).json({
                 message: "Device configs saved successfully!",
                 data: newConfigs
