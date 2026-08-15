@@ -1,10 +1,16 @@
 const devicesForm = document.getElementById("device-config");
 const deviceTableBody = document.getElementById("device-table-body");
+const addDeviceBtn = document.getElementById("add-device-btn");
 const devicesEndpoint = "/config/devices";
 
 devicesForm.addEventListener("submit", (e) => {
     e.preventDefault();
     formSubmit();
+});
+
+addDeviceBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    addNewDevice();
 });
 
 var deviceCounter = 0;
@@ -21,6 +27,7 @@ async function loadExisting() {
             throw new Error(`HTTP error while fetching existing device data: ${response.status}`);
         }
         const result = await response.json();
+        console.log(result);
 
         for (const [key, value] of Object.entries(result)) {
             addDeviceRow(key, value);
@@ -153,14 +160,14 @@ function validateNewId(el) {
         }
     }
 
-    if (isValid) {
+    if (!isValid) {
         el.setCustomValidity("IDs must be unique per device! It is recommended to use the device's MAC address");
     } else {
         el.setCustomValidity("");
     }
 }
 
-function formSubmit() {
+async function formSubmit() {
     const rows = deviceTableBody.querySelectorAll("tr");
     let devices = { ...existingDevices };
     
@@ -172,16 +179,17 @@ function formSubmit() {
         }
 
         let device = devices[id];
-        device[name] = getFieldValue(row, "name");
-        device[width] = getFieldValue(row, "width");
-        device[height] = getFieldValue(row, "height");
-        device[prefer_bmp] = getFieldValue(row, "preferbmp");
-        device[grayscale_depth] = getFieldValue(row, "grayscale");
-        device[color_depth] = getFieldValue(row, "color");
-        device[url] = getFieldValue(row, "url");
+        device["name"] = getFieldValue(row, "name");
+        device["width"] = getFieldValue(row, "width");
+        device["height"] = getFieldValue(row, "height");
+        device["prefer_bmp"] = getFieldValue(row, "preferbmp");
+        device["grayscale_depth"] = getFieldValue(row, "grayscale");
+        device["color_depth"] = getFieldValue(row, "color");
+        device["url"] = getFieldValue(row, "url");
     });
 
     try {
+        console.log(devices);
         const response = await fetch(devicesEndpoint, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -202,6 +210,7 @@ function formSubmit() {
     function getFieldValue(row, fieldName) {
         let field = row.querySelector(`input[name^="${fieldName}-"]`);
         if (field.type == "checkbox") return field.checked;
+        if (field.type == "number") return parseInt(field.value);
         return field.value;
     }
 }

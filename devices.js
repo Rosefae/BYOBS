@@ -134,6 +134,12 @@ function validateDeviceData(device, tryToFix = true) {
 }
 
 export async function saveDevicesData(devicesData) {
+    Object.entries(devicesData).forEach(([key, value]) => {
+        if (!value.hasOwnProperty("api_key") || value["api_key"] == "") {
+            value["api_key"] = crypto.randomUUID();
+        } 
+    });
+
     try {
         await utils.writeFileAndMakeDir(constants.DEVICES_ABS_PATH, JSON.stringify(devicesData));
         return true;

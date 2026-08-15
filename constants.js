@@ -3,6 +3,12 @@ import * as path from "node:path";
 export const PORT = process.env.PORT || 8081;
 export const BASE_URL = process.env.DOMAIN;
 
+export const IS_DEV_MODE = process.env.MODE === "DEV" || false;
+
+// Pages used for testing
+export const TESTING_REL_PATH = "./testing";
+export const TESTING_ABS_PATH = path.join(process.cwd(), TESTING_REL_PATH);
+
 // Web interface for managing the devices etc
 export const PAGES_REL_PATH = "./pages";
 export const PAGES_ABS_PATH = path.join(process.cwd(), PAGES_REL_PATH);

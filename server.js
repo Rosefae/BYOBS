@@ -3,7 +3,7 @@ import express from "express";
 import * as constants from "./constants.js";
 import * as utils from "./utils.js";
 
-import { updateOrAddDevice, addLog, getDeviceFromId, getDevicesData } from "./devices.js";
+import { updateOrAddDevice, addLog, getDeviceFromId, getDevicesData, saveDevicesData } from "./devices.js";
 import { generateImage } from "./render.js";
 
 startServer();
@@ -13,6 +13,12 @@ function startServer() {
 
     app.use(express.static(constants.PAGES_ABS_PATH));
     app.use(constants.RENDERS_REL_URL, express.static(constants.RENDERS_ABS_PATH));
+
+    if (constants.IS_DEV_MODE) {
+        app.use("/testing", express.static(constants.TESTING_ABS_PATH));
+    }
+
+    app.use(express.json());
 
     // TRMNL api endpoints
 
@@ -27,7 +33,9 @@ function startServer() {
                 });
             }
         }
-        res.status(400);
+        res.status(400).json({
+            message: "Something went wront :("
+        });
     });
 
     app.get("/api/setup", async (req, res) => {
@@ -42,16 +50,22 @@ function startServer() {
                 status: 200
             });
         } else {
-            res.status(400);
+            res.status(400).json({
+                message: "Something went wront :("
+            });
         }
     });
 
     app.post("/api/log", async (req, res) => {
         const log = JSON.stringify(req.body);
         if (addLog(log)) {
-            res.status(204);
+            res.status(204).json({
+                message: "Logged!"
+            });
         } else {
-            res.status(400);
+            res.status(400).json({
+                message: "Failed to log :("
+            });
         }
     });
 
@@ -60,14 +74,27 @@ function startServer() {
     app.get("/config/devices", async (req, res) => {
         if (!isLocal(req)) res.status(403);
         
-        const devicesData = getDevicesData();
-        if (!devicesData) devicesData = {};
+        const devicesData = await getDevicesData();
+        console.log(devicesData);
+        if (!devicesData) {
+            console.log("[server.js] No existing devices data found");
+            devicesData = {};
+        };
         res.json(devicesData);
     });
 
     app.post("/config/devices", async (req, res) => {
         if (!isLocal(req)) res.status(403);
-        console.log(req.body);
+        const newConfigs = req.body;
+        if (saveDevicesData(newConfigs)) {
+            res.status(200).json({
+                message: "Device configs saved successfully!",
+                data: newConfigs
+            })
+        }
+        else (res.status(400).json({
+            message: "Something went wrong :("
+        }));
     });
 
     app.listen(constants.PORT, "0.0.0.0", () => {
