@@ -24,7 +24,7 @@ function startServer() {
     // TRMNL api endpoints
 
     app.get("/api/display", async (req, res) => {
-        const device = getDeviceFromId(req.get("ID"));
+        const device = await getDeviceFromId(req.get("ID"));
         if (device) {
             const renderedFilename = await generateImage(device);
             if (renderedFilename) {
@@ -32,6 +32,7 @@ function startServer() {
                     filename: renderedFilename,
                     image_url: `${constants.RENDERS_ABS_URL}/${renderedFilename}`
                 });
+                return;
             }
         }
         res.status(400).json({
@@ -46,6 +47,7 @@ function startServer() {
             res.status(400).json({
                 message: "Missing device ID!"
             });
+            return;
         }
         const newApiKey = await updateOrAddDevice(deviceId, query);
         console.log({ newApiKey });
@@ -79,7 +81,10 @@ function startServer() {
     // Config page endpoints
 
     app.get("/config/devices", async (req, res) => {
-        if (!isLocal(req)) res.status(403);
+        if (!isLocal(req)) {
+            res.status(403);
+            return;
+        };
         
         const devicesData = await getDevicesData();
         if (!devicesData) {
@@ -90,13 +95,16 @@ function startServer() {
     });
 
     app.post("/config/devices", async (req, res) => {
-        if (!isLocal(req)) res.status(403);
+        if (!isLocal(req)) {
+            res.status(403);
+            return;
+        };
         const newConfigs = req.body;
         if (await saveDevicesData(newConfigs)) {
             res.status(200).json({
                 message: "Device configs saved successfully!",
                 data: newConfigs
-            })
+            });
         }
         else (res.status(400).json({
             message: "Something went wrong :("

@@ -1,4 +1,5 @@
 import path from 'node:path';
+import * as fs from 'node:fs';
 import puppeteer from "puppeteer";
 import { Jimp } from "jimp";
 
@@ -10,7 +11,7 @@ export async function generateImage(device) {
     if (!screenshotSuccess) return false;
 
     const processedFilename = await postprocess(device.grayscale_depth, device.color_depth, device.api_key, device.prefer_bmp);
-    if (!processSuccess) return false;
+    if (!processedFilename) return false;
 
     return processedFilename;
 }
@@ -30,10 +31,12 @@ async function takeScreenshot(url, width, height, apiKey) {
         await page.goto(url, { waitUntil: 'networkidle0' });
 
         console.log(`[render.js] Taking screenshot`);
+        await fs.promises.mkdir(constants.RENDERS_ABS_PATH, { recursive: true });
         await page.screenshot({
             path: path.join(constants.RENDERS_ABS_PATH, `${apiKey}--original.png`)
         });
 
+        console.log("[render.js] Screenshot success!")
         return true;
     } catch (error) {
         console.error("[render.js] Error creating screenshot", error);

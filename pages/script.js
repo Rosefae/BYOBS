@@ -157,7 +157,7 @@ function addNewDevice() {
         prefer_bmp: false,
         grayscale_depth: 4,
         color_depth: 0,
-        url: "https://en.wikipedia.org/wiki/Main_Page",
+        url: `${window.location.origin}/welcome.html`,
         api_key: ""
     });
 }

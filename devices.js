@@ -33,6 +33,7 @@ export async function getDeviceFromId(id) {
     try {
         const devicesData = await getDevicesData();
         if (!devicesData) return null;
+        if (!Object.hasOwn(devicesData, id)) return null;
         return devicesData[id];
     } catch (error) {
         console.error("[devices.js] Cannot find device ID!", error);
