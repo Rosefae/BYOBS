@@ -9,7 +9,7 @@ export async function generateImage(device) {
     const screenshotSuccess = await takeScreenshot(device.url, device.width, device.height, device.api_key);
     if (!screenshotSuccess) return false;
 
-    const processedFilename = await postprocess(device.grayscale_bits, device.color_bits, device.api_key, device.prefer_bmp);
+    const processedFilename = await postprocess(device.grayscale_depth, device.color_depth, device.api_key, device.prefer_bmp);
     if (!processSuccess) return false;
 
     return processedFilename;
@@ -42,12 +42,12 @@ async function takeScreenshot(url, width, height, apiKey) {
     }
 }
 
-async function postprocess(grayscaleBits, colorBits, apiKey, preferBmp) {
+async function postprocess(grayscaleDepth, colorDepth, apiKey, preferBmp) {
     try {
         const originalScreenshotPath = path.join(constants.RENDERS_ABS_PATH, `${apiKey}--original.png`),
             image = await Jimp.read(originalScreenshotPath);
 
-        if (colorBits == 0) {
+        if (colorDepth == 0) {
             image.greyscale();
         }
         

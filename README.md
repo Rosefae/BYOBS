@@ -33,13 +33,13 @@ TODO
 | Name | A human-readable name for the device (Optional) |
 | Width | The device resolution's width |
 | Height | The device resolution's height |
-| Prefer BMP? | Whether to send back a BMP image instead of a PNG |
-| Grayscale Bits | Number of bits of grayscale that the device can display |
-| Color Bits | Number of bits of color that the device can display. For BW screens, this is 0 |
+| Prefer BMP | Whether to send back a BMP image instead of a PNG |
+| Grayscale Depth | Number of bits of grayscale that the device can display |
+| Color Depth | Number of bits of each color that the device can display. For BW screens, this is 0 |
 | URL | The URL of the page you would like the device to display |
-| API Key (hidden) | Generated per device, and used by BYOBS as the screenshot's filename |
+| API Key | Generated per device, and used by BYOBS as the screenshot's filename |
 
-Custom BYOD devices can also pass all values as query parameters.
+Custom BYOD devices can also pass all values as query parameters with the `api/setup` GET request.
 
 The generated images will be stored at `renders/<device API key>.png` or `renders/<device API key>.bmp`, so you can always look there to see what your device is currently (or should currently) be displaying.
 

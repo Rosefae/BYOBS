@@ -3,7 +3,7 @@ import express from "express";
 import * as constants from "./constants.js";
 import * as utils from "./utils.js";
 
-import { deviceSetup, addLog, getDeviceFromId } from "./devices.js";
+import { updateOrAddDevice, addLog, getDeviceFromId, getDevicesData } from "./devices.js";
 import { generateImage } from "./render.js";
 
 startServer();
@@ -13,6 +13,8 @@ function startServer() {
 
     app.use(express.static(constants.PAGES_ABS_PATH));
     app.use(constants.RENDERS_REL_URL, express.static(constants.RENDERS_ABS_PATH));
+
+    // TRMNL api endpoints
 
     app.get("/api/display", async (req, res) => {
         const device = getDeviceFromId(req.get("ID"));
@@ -31,7 +33,7 @@ function startServer() {
     app.get("/api/setup", async (req, res) => {
         const deviceId = req.get("ID"),
             query = req.query;
-        const newApiKey = deviceSetup(deviceId, query);
+        const newApiKey = updateOrAddDevice(deviceId, query);
         if (newApiKey) {
             res.json({
                 api_key: newApiKey,
@@ -53,7 +55,27 @@ function startServer() {
         }
     });
 
+    // Config page endpoints
+
+    app.get("/config/devices", async (req, res) => {
+        if (!isLocal(req)) res.status(403);
+        
+        const devicesData = getDevicesData();
+        if (!devicesData) devicesData = {};
+        res.json(devicesData);
+    });
+
+    app.post("/config/devices", async (req, res) => {
+        if (!isLocal(req)) res.status(403);
+        console.log(req.body);
+    });
+
     app.listen(constants.PORT, "0.0.0.0", () => {
         console.log(`[server.js] BYOBS is listening on ${constants.PORT}`);
     });
+}
+
+function isLocal(req) {
+    const ip = req.ip || req.connection.remoteAddress;
+    return ip === '127.0.0.1' || ip === '::1' || ip === '::ffff:127.0.0.1';
 }
