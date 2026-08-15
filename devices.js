@@ -1,3 +1,4 @@
+import * as fs from "node:fs";
 import crypto from "node:crypto";
 
 import * as constants from "./constants.js";
@@ -157,6 +158,7 @@ export async function saveDevicesData(devicesData) {
 // Handle device logs
 
 export async function addLog(log) {
+    const logString = JSON.stringify(log);
     try {
         await fs.promises.appendFile(constants.LOG_ABS_PATH, logString);
         return true;

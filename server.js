@@ -66,7 +66,7 @@ function startServer() {
     });
 
     app.post("/api/log", async (req, res) => {
-        const log = JSON.stringify(req.body);
+        const log = req.body;
         if (await addLog(log)) {
             res.status(204).json({
                 message: "Logged!"
