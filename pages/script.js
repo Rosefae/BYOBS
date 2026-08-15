@@ -27,7 +27,6 @@ async function loadExisting() {
             throw new Error(`HTTP error while fetching existing device data: ${response.status}`);
         }
         const result = await response.json();
-        console.log(result);
 
         for (const [key, value] of Object.entries(result)) {
             addDeviceRow(key, value);
@@ -40,6 +39,8 @@ async function loadExisting() {
 
 function addDeviceRow(id, device) {
     let row = document.createElement("tr");
+
+    addNewDeleteCell();
 
     if (!id) {
         row.dataset.id = "";
@@ -125,6 +126,19 @@ function addDeviceRow(id, device) {
 
         row.appendChild(cell);
     }
+
+    function addNewDeleteCell() {
+        let cell = document.createElement("td");
+        let btn = document.createElement("button");
+        btn.classList.add("delete-btn");
+        btn.innerText = "Delete Device";
+        btn.type = "button";
+        btn.addEventListener("click", (e) => {
+            deleteDevice(row);
+        });
+        cell.appendChild(btn);
+        row.appendChild(cell);
+    }
 }
 
 function resetDeviceTable() {
@@ -167,15 +181,22 @@ function validateNewId(el) {
     }
 }
 
+function deleteDevice(row) {
+    row.remove();
+}
+
 async function formSubmit() {
     const rows = deviceTableBody.querySelectorAll("tr");
-    let devices = { ...existingDevices };
+    let devices = {};
     
     rows.forEach((row) => {
         let id = row.dataset.id;
         if (!id) {
             id = getFieldValue(row, "id");
             devices[id] = {};
+        }
+        else {
+            devices[id] = { ...existingDevices[id] };
         }
 
         let device = devices[id];
@@ -189,7 +210,6 @@ async function formSubmit() {
     });
 
     try {
-        console.log(devices);
         const response = await fetch(devicesEndpoint, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
