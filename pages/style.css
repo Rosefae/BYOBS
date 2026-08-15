@@ -1,1 +1,193 @@
 /* TODO */
+:root {
+    --color-theme: #c8e236;
+    --color-theme-l1: #d3e85e;
+    --color-theme-l2: #deee87;
+    --color-theme-l3: #e9f4af;
+    --color-theme-l4: #f4f9d7;
+    --color-theme-l5: #fcfdf3;
+    --color-theme-d1: #c0dd20;
+    --color-theme-d2: #abc41c;
+    --color-theme-d3: #96ac19;
+    --color-theme-d4: #809315;
+    --color-theme-d5: #6b7b12;
+
+    --color-bg: var(--color-theme-l4);
+    --color-fg: black;
+    --color-fg-accent: var(--color-theme-d4);
+    --color-button-bg: var(--color-theme-d4);
+    --color-button-fg: var(--color-theme-l5);
+    
+    @media screen and (prefers-color-scheme: dark) {
+        --color-bg: var(--color-theme-d5);
+        --color-fg: var(--color-theme-l5);
+        --color-fg-accent: var(--color-theme-l1);
+        --color-button-bg: var(--color-theme-l2);
+        --color-button-fg: var(--color-theme-d5);
+    }
+}
+
+html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    font-size: 16px;
+}
+
+body {
+    margin: 0;
+    padding: 1rem;
+    box-sizing: border-box;
+    font-family: 'Verdana', 'Roboto', 'Arial', sans-serif;
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    padding: 1rem;
+    position: relative;
+}
+
+h1 {
+    color: var(--color-fg-accent);
+    text-align: center;
+    margin: 0 0 1rem 0;
+}
+
+table {
+    border-collapse: collapse;
+    font-size: 0.8rem;
+}
+
+th {
+    color: var(--color-fg-accent);
+    text-align: center;
+    font-weight: normal;
+    padding: 0 0.3rem;
+}
+
+td {
+    border-bottom: 1px solid var(--color-fg-accent);
+    white-space: nowrap;
+    padding: 0.5rem 0.3rem;
+    text-align: center;
+}
+
+.device-config {
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    width: 100%;
+    margin-bottom: 2.5rem;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+    position: fixed;
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
+}
+
+button {
+    border: none;
+    background: var(--color-button-bg);
+    color: var(--color-button-fg);
+    text-transform: uppercase;
+    font-weight: bold;
+    border-radius: 1rem;
+    cursor: pointer;
+}
+
+.delete-btn {
+    position: relative;
+    padding: 0;
+    height: 1.5rem;
+    width: 1.5rem;
+
+    span {
+        clip: rect(1px, 1px, 1px, 1px);
+        clip-path: inset(50%);
+        height: 1px;
+        width: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+    }
+
+    &::before, &::after {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(45deg);
+        width: 0.2rem;
+        height: 1rem;
+        background-color: var(--color-button-fg);
+    }
+
+    &::after {
+        transform: translate(-50%, -50%) rotate(-45deg);
+    }
+}
+
+.add-device-btn {
+    position: relative;
+    padding: 0 1rem 0 2rem;
+    height: 2rem;
+    min-width: 2rem;
+    box-sizing: border-box;
+
+    &::before,
+    &::after {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 1rem;
+        transform: translate(-50%, -50%);
+        width: 0.2rem;
+        height: 1rem;
+        background-color: var(--color-button-fg);
+    }
+
+    &::after {
+        transform: translate(-50%, -50%) rotate(-90deg);
+    }
+}
+
+.save-btn {
+    height: 2rem;
+    box-sizing: border-box;
+    padding: 0 1rem;
+}
+
+input{
+    padding: 0.3rem 0.5rem;
+    background: none;
+    border: 1px solid var(--color-fg-accent);
+    border-radius: 1rem;
+    color: var(--color-fg);
+
+    &[name^="name-"] {
+        width: 6rem;
+    }
+
+    &[name^="width-"],
+    &[name^="height-"] {
+        width: 2.5rem;
+    }
+
+    &[name^="grayscale-"],
+    &[name^="color-"] {
+        width: 2rem;
+    }
+}

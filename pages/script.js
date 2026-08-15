@@ -131,7 +131,7 @@ function addDeviceRow(id, device) {
         let cell = document.createElement("td");
         let btn = document.createElement("button");
         btn.classList.add("delete-btn");
-        btn.innerText = "Delete Device";
+        btn.innerHTML = "<span>Delete Device</span>";
         btn.type = "button";
         btn.addEventListener("click", (e) => {
             deleteDevice(row);

@@ -75,7 +75,6 @@ function startServer() {
         if (!isLocal(req)) res.status(403);
         
         const devicesData = await getDevicesData();
-        console.log(devicesData);
         if (!devicesData) {
             console.log("[server.js] No existing devices data found");
             devicesData = {};
