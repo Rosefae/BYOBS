@@ -10,7 +10,14 @@ export async function generateImage(device) {
     const screenshotSuccess = await takeScreenshot(device.url, device.width, device.height, device.api_key);
     if (!screenshotSuccess) return false;
 
-    const processedFilename = await postprocess(device.grayscale_depth, device.color_depth, device.api_key, device.prefer_bmp);
+    const processedImgDir = path.join(constants.RENDERS_ABS_PATH, `./${device.apiKey}`);
+    try {
+        await fs.promises.rm(processedImgDir, { recursive: true });
+    } catch (error) {
+        console.error("[render.js] failed to remove existing img dir");
+    }
+
+    const processedFilename = await postprocess(device.grayscale_depth, device.color_depth, device.api_key, device.prefer_bmp, processedImgDir);
     if (!processedFilename) return false;
 
     return processedFilename;
@@ -47,7 +54,7 @@ async function takeScreenshot(url, width, height, apiKey) {
     }
 }
 
-async function postprocess(grayscaleDepth, colorDepth, apiKey, preferBmp) {
+async function postprocess(grayscaleDepth, colorDepth, apiKey, preferBmp, imgDir) {
     try {
         const originalScreenshotPath = path.join(constants.RENDERS_ABS_PATH, `${apiKey}--original.png`),
             image = await Jimp.read(originalScreenshotPath);
@@ -60,7 +67,6 @@ async function postprocess(grayscaleDepth, colorDepth, apiKey, preferBmp) {
         
         const time = Date.now();
         const filename = preferBmp ? `${time}.bmp` : `${time}.png`;
-        const imgDir = path.join(constants.RENDERS_ABS_PATH, `./${apiKey}`);
         await fs.promises.mkdir(imgDir, { recursive: true });
 
         await image.write(path.join(imgDir, filename));
