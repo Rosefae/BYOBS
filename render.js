@@ -58,9 +58,12 @@ async function postprocess(grayscaleDepth, colorDepth, apiKey, preferBmp) {
             image.quantize({ colors: 2 ** grayscaleDepth, imageQuantization: "floyd-steinberg" });
         }
         
-        const filename = preferBmp ? `${apiKey}.bmp` : `${apiKey}.png`;
+        const time = Date.now();
+        const filename = preferBmp ? `${time}.bmp` : `${time}.png`;
+        const imgDir = path.join(constants.RENDERS_ABS_PATH, `./${apiKey}`);
+        await fs.promises.mkdir(imgDir, { recursive: true });
 
-        await image.write(path.join(constants.RENDERS_ABS_PATH, filename));
+        await image.write(path.join(imgDir, filename));
 
         return filename;
     } catch (error) {

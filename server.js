@@ -25,13 +25,14 @@ function startServer() {
     // TRMNL api endpoints
 
     app.get("/api/display", async (req, res) => {
-        const device = await getDeviceFromId(req.get("ID"));
+        const id = req.get("ID");
+        const device = await getDeviceFromId(id);
         if (device) {
             const renderedFilename = await generateImage(device);
             if (renderedFilename) {
                 res.json({
                     filename: renderedFilename,
-                    image_url: `${constants.RENDERS_ABS_URL}/${renderedFilename}?t=${Date.now()}`
+                    image_url: `${constants.RENDERS_ABS_URL}/${id}/${renderedFilename}`
                 });
                 return;
             }
