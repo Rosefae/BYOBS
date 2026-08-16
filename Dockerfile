@@ -1,7 +1,15 @@
 FROM ghcr.io/puppeteer/puppeteer:latest
 
-# Install NVM
+# Add Puppeteer user to owner group for the files it'll need to write
+ARG DATA_GROUP_OWNER_ID
+ENV GROUP_ID=${DATA_GROUP_OWNER_ID}
 USER root
+# RUN usermod -aG $(getent group ${GROUP_ID} | cut -d: -f1) $(getent user ${PPTRUSER_UID})
+RUN GROUP_NAME=$(getent group ${GROUP_ID} | cut -d: -f1) \
+    && PPTRUSER_NAME=$(id -u -n ${PPTRUSER_UID}) \
+    && usermod -aG $GROUP_NAME $PPTRUSER_NAME
+
+# Install NVM
 RUN apt-get update && apt-get install -y curl
 USER $PPTRUSER_UID
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
