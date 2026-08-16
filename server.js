@@ -31,7 +31,7 @@ function startServer() {
             if (renderedFilename) {
                 res.json({
                     filename: renderedFilename,
-                    image_url: `${constants.RENDERS_ABS_URL}/${renderedFilename}?t=${Temporal.Now.instant().epochMilliseconds}`
+                    image_url: `${constants.RENDERS_ABS_URL}/${renderedFilename}?t=${Date.now()}`
                 });
                 return;
             }
