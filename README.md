@@ -10,10 +10,17 @@ Requires Node v26+.
 
 ## Installation
 
-1. Create an `.env` file (see below for sample file)
-2. `docker compose up --build`
+1. Clone this repo.
+2. Create an `.env` file in the project root (see below for sample file)
+3. If you're planning to run this in a docker container:
+    1. Create a `/data/` and `/renders/` directory in the root.
+    2. Update `compose.yaml`. In particular, `DATA_GROUP_OWNER_ID` should be the id of the group owner of the `/data/` and `/renders/` directories
+    3. `docker compose up --build`
+4. If you're not in a docker container:
+    1. Make sure you are on the right version of NPM, then `npm install`
+    2. `npm start`
 
-Note that the docker container is set up to foward the configuration stuff to a different port than the one that the actual devices will be talking to. This is to facilitate allowing different access to each.
+Note that the docker container is set up to foward the configuration stuff to a different port than the one that the actual devices will be talking to. This is to facilitate allowing different access permissions to each (see `nginx.conf` for details).
 
 ### Sample `.env` File
 
