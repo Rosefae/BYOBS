@@ -1,5 +1,5 @@
 services:
-  server:
+  byobs:
     container_name: byobs
     environment:
       - TZ=America/Toronto
@@ -8,5 +8,19 @@ services:
       - ./renders:/app/renders
     build:
       context: .
+    networks:
+      local_net_thing: {}
     ports:
       - 8081:8081
+  reverseproxy:
+    image: nginx:1.25.5
+    ports:
+      - 8081:8081
+      - 8082:8082
+    restart: always
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      local_net_thing: {}
+networks:
+  local_net_thing: {}
