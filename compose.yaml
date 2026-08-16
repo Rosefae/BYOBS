@@ -11,7 +11,7 @@ services:
     networks:
       local_net_thing: {}
     ports:
-      - 8081:8081
+      - 8081
   reverseproxy:
     image: nginx:1.25.5
     ports:
