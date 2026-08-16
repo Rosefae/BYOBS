@@ -178,7 +178,8 @@ input{
     }
 
     &[name^="width-"],
-    &[name^="height-"] {
+    &[name^="height-"],
+    &[name^="refresh-"] {
         width: 2.5rem;
     }
 

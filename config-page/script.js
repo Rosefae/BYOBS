@@ -76,6 +76,12 @@ function addDeviceRow(id, device) {
         "table-heading-height",
         { min: 1, step: 1 }
     );
+    addNewInputCell("number",
+        "refresh-" + deviceCounter,
+        device.refresh_interval,
+        "table-heading-refresh",
+        { min: 60, step: 1 }
+    );
     addNewInputCell("checkbox",
         "preferbmp-" + deviceCounter,
         device.prefer_bmp,
@@ -154,6 +160,7 @@ function addNewDevice() {
         name: "New Device",
         width: 800,
         height: 480,
+        refresh_interval: 300,
         prefer_bmp: false,
         grayscale_depth: 4,
         color_depth: 0,
@@ -206,6 +213,7 @@ async function formSubmit() {
         device["name"] = getFieldValue(row, "name");
         device["width"] = getFieldValue(row, "width");
         device["height"] = getFieldValue(row, "height");
+        device["refresh_interval"] = getFieldValue(row, "refresh");
         device["prefer_bmp"] = getFieldValue(row, "preferbmp");
         device["grayscale_depth"] = getFieldValue(row, "grayscale");
         device["color_depth"] = getFieldValue(row, "color");

@@ -9,6 +9,7 @@ const DEVICE_DEFAULTS = {
     name: "New Device",
     width: 800,
     height: 480,
+    refresh_interval: 300,
     prefer_bmp: false,
     grayscale_depth: 4,
     color_depth: 0,

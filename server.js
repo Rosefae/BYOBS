@@ -31,7 +31,8 @@ function startServer() {
             if (renderedFilename) {
                 res.json({
                     filename: renderedFilename,
-                    image_url: `${constants.RENDERS_ABS_URL}/${device.api_key}/${renderedFilename}`
+                    image_url: `${constants.RENDERS_ABS_URL}/${device.api_key}/${renderedFilename}`,
+                    refresh_interval: device.refresh_interval
                 });
                 return;
             }
