@@ -81,11 +81,7 @@ function startServer() {
     // Config page endpoints
 
     app.get("/config/devices", async (req, res) => {
-        if (!isLocal(req)) {
-            res.status(403);
-            return;
-        };
-        
+        console.log("[server.js] GET request for /config/devices");
         const devicesData = await getDevicesData();
         if (!devicesData) {
             console.log("[server.js] No existing devices data found");
@@ -95,10 +91,7 @@ function startServer() {
     });
 
     app.post("/config/devices", async (req, res) => {
-        if (!isLocal(req)) {
-            res.status(403);
-            return;
-        };
+        console.log("[server.js] POST request for /config/devices");
         const newConfigs = req.body;
         if (await saveDevicesData(newConfigs)) {
             res.status(200).json({
@@ -114,9 +107,4 @@ function startServer() {
     app.listen(constants.PORT, "0.0.0.0", () => {
         console.log(`[server.js] BYOBS is listening on ${constants.PORT}`);
     });
-}
-
-function isLocal(req) {
-    const ip = req.ip || req.connection.remoteAddress;
-    return ip === '127.0.0.1' || ip === '::1' || ip === '::ffff:127.0.0.1';
 }

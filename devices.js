@@ -19,6 +19,7 @@ const DEVICE_DEFAULTS = {
 // Handle config
 
 export async function getDevicesData() {
+    console.log("[devices.js] Getting device data...");
     try {
         let raw = await utils.readFilePatient(constants.DEVICES_ABS_PATH);
         let devicesData = JSON.parse(raw);

@@ -20,11 +20,11 @@ export const RENDERS_REL_URL = "/renders";
 export const RENDERS_ABS_URL = BASE_URL + RENDERS_REL_URL;
 
 // File storing info about the devices
-export const DEVICES_REL_PATH = "./devices.json";
+export const DEVICES_REL_PATH = "./data/devices.json";
 export const DEVICES_ABS_PATH = path.join(process.cwd(), DEVICES_REL_PATH);
 
 // Logs received from devices
-export const LOG_REL_PATH = "./log.txt";
+export const LOG_REL_PATH = "./data/log.txt";
 export const LOG_ABS_PATH = path.join(process.cwd(), LOG_REL_PATH);
 
 // Welcome values

@@ -1,0 +1,7 @@
+node_modules/
+renders/
+devices.json
+log.txt
+.git
+.gitignore
+README.md

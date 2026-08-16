@@ -1,0 +1,12 @@
+services:
+  server:
+    container_name: byobs
+    environment:
+      - TZ=America/Toronto
+    volumes:
+      - ./data:/app/data
+      - ./renders:/app/renders
+    build:
+      context: .
+    ports:
+      - 8081:8081
