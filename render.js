@@ -10,7 +10,7 @@ export async function generateImage(device) {
     const screenshotSuccess = await takeScreenshot(device.url, device.width, device.height, device.api_key);
     if (!screenshotSuccess) return false;
 
-    const processedImgDir = path.join(constants.RENDERS_ABS_PATH, `./${device.apiKey}`);
+    const processedImgDir = path.join(constants.RENDERS_ABS_PATH, `./${device.api_key}`);
     try {
         await fs.promises.rm(processedImgDir, { recursive: true });
     } catch (error) {
@@ -62,7 +62,9 @@ async function postprocess(grayscaleDepth, colorDepth, apiKey, preferBmp, imgDir
         if (colorDepth == 0) {
             image.greyscale();
             image.dither();
-            image.quantize({ colors: 2 ** grayscaleDepth, imageQuantization: "floyd-steinberg" });
+            // image.quantize({ colors: 2 ** grayscaleDepth, imageQuantization: "atkinson" });
+            // image.posterize(2 ** grayscaleDepth);
+            // quantize refuses to keep blacks and whites pures. More investigation is needed
         }
         
         const time = Date.now();

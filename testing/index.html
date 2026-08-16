@@ -68,7 +68,7 @@
 
                 const result = await response.json();
                 resultsBox.innerHTML = `
-                    <img src="${result.image_url}?t=${Date.now()}" alt="screenshot">
+                    <img src="${result.image_url}" alt="screenshot">
                 `
                 console.log(result);
             } catch (error) {
