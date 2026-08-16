@@ -10,7 +10,7 @@ export const TESTING_REL_PATH = "./testing";
 export const TESTING_ABS_PATH = path.join(process.cwd(), TESTING_REL_PATH);
 
 // Web interface for managing the devices etc
-export const PAGES_REL_PATH = "./pages";
+export const PAGES_REL_PATH = "./config-page";
 export const PAGES_ABS_PATH = path.join(process.cwd(), PAGES_REL_PATH);
 
 // Where the captured screenshots live
@@ -28,7 +28,10 @@ export const LOG_REL_PATH = "./data/log.txt";
 export const LOG_ABS_PATH = path.join(process.cwd(), LOG_REL_PATH);
 
 // Welcome values
-export const WELCOME_PAGE_REL_URL = "/welcome.html";
+export const WELCOME_REL_PATH = "./welcome";
+export const WELCOME_ABS_PATH = path.join(process.cwd(), WELCOME_REL_PATH);
+export const WELCOME_REL_URL = "/welcome";
+export const WELCOME_PAGE_REL_URL = WELCOME_REL_URL;
 export const WELCOME_PAGE_ABS_URL = BASE_URL + WELCOME_PAGE_REL_URL;
-export const WELCOME_IMG_REL_URL = "/welcome.bmp";
+export const WELCOME_IMG_REL_URL = WELCOME_REL_URL + "/welcome.bmp";
 export const WELCOME_IMG_ABS_URL = BASE_URL + WELCOME_IMG_REL_URL;

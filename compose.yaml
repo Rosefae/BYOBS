@@ -8,8 +8,6 @@ services:
       - ./renders:/app/renders
     build:
       context: .
-    networks:
-      local_net_thing: {}
     ports:
       - 8081
   reverseproxy:
@@ -20,7 +18,3 @@ services:
     restart: always
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
-    networks:
-      local_net_thing: {}
-networks:
-  local_net_thing: {}

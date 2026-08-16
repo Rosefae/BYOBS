@@ -11,8 +11,9 @@ startServer();
 function startServer() {
     const app = express();
 
-    app.use(express.static(constants.PAGES_ABS_PATH));
+    app.use("/config", express.static(constants.PAGES_ABS_PATH));
     app.use(constants.RENDERS_REL_URL, express.static(constants.RENDERS_ABS_PATH));
+    app.use(constants.WELCOME_REL_URL, express.static(constants.WELCOME_ABS_PATH));
 
     if (constants.IS_DEV_MODE) {
         console.log("[server.js] !!! SERVER IS RUNNING IN DEV MODE !!!")
