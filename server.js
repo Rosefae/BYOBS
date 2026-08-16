@@ -83,7 +83,7 @@ function startServer() {
 
     app.get("/config/devices", async (req, res) => {
         console.log("[server.js] GET request for /config/devices");
-        const devicesData = await getDevicesData();
+        let devicesData = await getDevicesData();
         if (!devicesData) {
             console.log("[server.js] No existing devices data found");
             devicesData = {};

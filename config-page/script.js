@@ -157,7 +157,7 @@ function addNewDevice() {
         prefer_bmp: false,
         grayscale_depth: 4,
         color_depth: 0,
-        url: `${window.location.origin}/welcome.html`,
+        url: `${window.location.origin}/welcome`, // TODO: window.location.origin no longer works because the ports are different now
         api_key: ""
     });
 }

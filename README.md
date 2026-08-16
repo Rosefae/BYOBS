@@ -10,7 +10,10 @@ Requires Node v26+.
 
 ## Installation
 
-TODO
+1. Create an `.env` file (see below for sample file)
+2. `docker compose up --build`
+
+Note that the docker container is set up to foward the configuration stuff to a different port than the one that the actual devices will be talking to. This is to facilitate allowing different access to each.
 
 ### Sample `.env` File
 
@@ -27,7 +30,7 @@ To enable developer mode, add `MODE = DEV`. Currently all this does is enable a 
 
 ### Adding or Configuring a Device
 
-While the server is running, you can go to its index page on your browser to access the device configuration page. From here, you can add new devices or modify the configuration for existing ones. 
+While the server is running, you can go to `<your-domain-or-ip>/config` on your browser to access the device configuration page. From here, you can add new devices or modify the configuration for existing ones. 
 
 For devices that support it, pointing the device at the `api/setup` end point will also add the device.
 
