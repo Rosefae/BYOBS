@@ -4,7 +4,7 @@ FROM ghcr.io/puppeteer/puppeteer:latest
 ARG DATA_GROUP_OWNER_ID
 ENV GROUP_ID=${DATA_GROUP_OWNER_ID}
 USER root
-# RUN usermod -aG $(getent group ${GROUP_ID} | cut -d: -f1) $(getent user ${PPTRUSER_UID})
+RUN getent group $GROUP_ID || groupadd --gid $GROUP_ID appgroup
 RUN PPTRUSER_NAME=$(id -u -n ${PPTRUSER_UID}) \
     && usermod -aG ${GROUP_ID} $PPTRUSER_NAME
 
