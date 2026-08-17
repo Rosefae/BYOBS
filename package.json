@@ -20,8 +20,9 @@
   },
   "dependencies": {
     "express": "^5.2.1",
-    "jimp": "^1.6.1",
-    "puppeteer": "^25.7.0"
+    "puppeteer": "^25.7.0",
+    "sharp": "^0.35.3",
+    "sharp-bmp": "^0.1.5"
   },
   "allowScripts": {
     "puppeteer@25.7.0": true

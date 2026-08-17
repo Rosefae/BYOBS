@@ -1,7 +1,8 @@
 import path from 'node:path';
 import * as fs from 'node:fs';
 import puppeteer from "puppeteer";
-import { Jimp } from "jimp";
+import sharp from 'sharp';
+import bmp from 'sharp-bmp';
 
 import * as constants from "./constants.js";
 import * as utils from "./utils.js";
@@ -56,24 +57,67 @@ async function takeScreenshot(url, width, height, apiKey) {
 
 async function postprocess(grayscaleDepth, colorDepth, apiKey, preferBmp, imgDir) {
     try {
-        const originalScreenshotPath = path.join(constants.RENDERS_ABS_PATH, `${apiKey}--original.png`),
-            image = await Jimp.read(originalScreenshotPath);
+        // const originalScreenshotPath = path.join(constants.RENDERS_ABS_PATH, `${apiKey}--original.png`),
+        //     image = await Jimp.read(originalScreenshotPath);
 
-        if (colorDepth == 0) {
-            image.greyscale();
-            image.dither();
-            // image.quantize({ colors: 2 ** grayscaleDepth, imageQuantization: "atkinson" });
-            // image.posterize(2 ** grayscaleDepth);
-            // quantize refuses to keep blacks and whites pures. More investigation is needed
-        }
+        // if (colorDepth == 0) {
+        //     image.greyscale();
+        //     image.dither();
+        //     image.quantize({ colors: 2 ** grayscaleDepth, imageQuantization: "atkinson" });
+        //     // image.posterize(2 ** grayscaleDepth);
+        //     // quantize refuses to keep blacks and whites pures. More investigation is needed
+        // }
         
+        // const time = Date.now();
+        // const filename = preferBmp ? `${time}.bmp` : `${time}.png`;
+        // await fs.promises.mkdir(imgDir, { recursive: true });
+
+        // await image.write(path.join(imgDir, filename), { quality: 30 });
+
+        // return filename;
+
+
+        const originalScreenshotPath = path.join(constants.RENDERS_ABS_PATH, `${apiKey}--original.png`);
         const time = Date.now();
         const filename = preferBmp ? `${time}.bmp` : `${time}.png`;
-        await fs.promises.mkdir(imgDir, { recursive: true });
+        const outputFilePath = path.join(imgDir, filename);
 
-        await image.write(path.join(imgDir, filename));
+        await fs.promises.mkdir(imgDir, { recursive: true });
+        
+        const image = await sharp(originalScreenshotPath).removeAlpha();
+        // Operations to experiment with: gamma, normalize
+
+        let maxColors = 256;
+
+        if (colorDepth == 0) {
+            maxColors == 2 ** grayscaleDepth;
+            
+            await image.grayscale();
+            
+            if (grayscaleDepth == 1) {
+                await image.toColorspace("b-w");
+            } else if (grayscaleDepth <= 4) {
+                await image.toColorspace("grey16");
+            }
+        } else {
+            await image.toColorspace("rgb16");
+        }
+
+        await image.png({
+            compressionLevel: 9,
+            palette: true,
+            dither: 1,
+            colors: maxColors
+        });
+
+        if (preferBmp) {
+            await bmp.sharpToBmp(image, outputFilePath);
+        } else {
+            await image.toFile(outputFilePath);
+        }
 
         return filename;
+        
     } catch (error) {
         console.error("[render.js] Error postprocessing screenshot", error);
     }

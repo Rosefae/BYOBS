@@ -49,6 +49,7 @@ For devices that support it, pointing the device at the `api/setup` end point wi
 | Name | A human-readable name for the device (Optional) |
 | Width | The device resolution's width |
 | Height | The device resolution's height |
+| Refresh Interval | Number of seconds to wait before fetching a new image. Min 60. | 
 | Prefer BMP | Whether to send back a BMP image instead of a PNG |
 | Grayscale Depth | Number of bits of grayscale that the device can display |
 | Color Depth | Number of bits of each color that the device can display. For BW screens, this is 0 |
@@ -66,6 +67,10 @@ Why is this in Node.js? Because it was originally part of a separate project (wh
 ### Known Issues
 
 Puppeteer has trouble accessing external websites with anti-bot measures. There are ways around this but I haven't investigated them yet.
+
+## Future Work
+
+- Adding a config field option for rotation, for if you want to mount the device at a different angle (ie sideways or upside down)
 
 ## License
 
